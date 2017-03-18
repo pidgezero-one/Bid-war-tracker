@@ -1,0 +1,34 @@
+﻿<Window x:Class="WpfApp2.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp2"
+        mc:Ignorable="d"
+        Title="AccessTokenInstructionWindow" Height="500" Width="500">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close"
+                        Executed="CloseCommandHandler"/>
+    </Window.CommandBindings>
+    <Grid>
+        <StackPanel>
+            <TextBlock Margin="10" TextWrapping="Wrap">
+            First you should see a browser window open asking for your permission to connect to Bid War Tracker. Once you approve, the browser window will show you a code.
+            </TextBlock>
+            <TextBlock Margin="10" TextWrapping="Wrap">
+            Paste that code below:
+            </TextBlock>
+            <TextBox Margin="10" Name="AuthCode"></TextBox>
+            <TextBlock Margin="10" TextWrapping="Wrap">
+            Now MAKE SURE THIS WINDOW IS NOT VISIBLE ON STREAM and click "Get My Access Token".
+            </TextBlock>
+            <Button Margin="10" Click="GetMyAuthToken">Get My Access Token</Button>
+            <TextBlock Margin="10" TextWrapping="Wrap">
+            Copy this, this is your Access Token. Use it in the main window.
+            </TextBlock>
+            <TextBox Margin="10" Name="AuthTokenOutput"></TextBox>
+            <Button Margin="10" Command="ApplicationCommands.Close" 
+                Content="Close this window" />
+        </StackPanel>
+    </Grid>
+</Window>

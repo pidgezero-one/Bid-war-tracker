@@ -1,0 +1,81 @@
+﻿<Window x:Class="WpfApp2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="600" Width="525">
+    <Window.CommandBindings>
+        <CommandBinding Command="Save" CanExecute="Save_CanExecute" Executed="Save_Executed" />
+        <CommandBinding Command="SaveAs" CanExecute="SaveAs_CanExecute" Executed="SaveAs_Executed" />
+        <CommandBinding Command="Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />
+        <CommandBinding Command="Close" CanExecute="Close_CanExecute" Executed="Close_Executed" />
+    </Window.CommandBindings>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Command="Open" />
+                <MenuItem Command="Save" Header="Save Config" />
+                <MenuItem Command="SaveAs" Header="Save Config As..." />
+                <MenuItem Command="Close" Header="Close File"/>
+                <Separator />
+                <MenuItem Click="Click_Exit" Header="_Exit" />
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7.765" />
+                <ColumnDefinition Width="113"/>
+                <ColumnDefinition Width="96*" />
+                <ColumnDefinition Width="161*"/>
+                <ColumnDefinition Width="139" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="55" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="10*" />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Margin="2,10,10,10" Click="LaunchWindow">Launch!</Button>
+            <TextBlock Margin="2,10,10,10"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="1">
+            From:
+            </TextBlock>
+            <DatePicker Margin="10"  Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="3" Name="DonationCutoff" SelectedDateChanged="unsaved"></DatePicker>
+            <TextBlock Margin="2,10,10,10"  Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="1">
+            Until:
+            </TextBlock>
+            <DatePicker Margin="10"  Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Name="DonationCutoff2" SelectedDateChanged="unsaved"></DatePicker>
+            <TextBlock Margin="2,10,10,10"  Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="1">
+            Streamlabs Token:
+            </TextBlock>
+            <PasswordBox Margin="10" Grid.Row="3"  Grid.Column="2" Grid.ColumnSpan="3" Name="AccessToken" PasswordChanged="unsaved"/>
+            <TextBlock Margin="2,10,10,10"  Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="1">
+            Twitch Token:
+            </TextBlock>
+            <PasswordBox Margin="10" Grid.Row="4"  Grid.Column="2" Grid.ColumnSpan="3" Name="TwitchAccessToken" PasswordChanged="unsaved"/>
+            <TextBlock Margin="2,10,10,10"  Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" TextAlignment="Right">
+            (Don't know your access token?)
+            </TextBlock>
+            <Button Grid.Row="5" Grid.Column="3" Margin="10" Click="GetToken">Get Streamlabs Token</Button>
+            <Button Grid.Row="5" Grid.Column="5" Margin="10" Click="GetTwitchToken">Get Twitch Token</Button>
+            <TextBlock Margin="2,10,10,10"  Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="3">
+            Enter bid-war options below:
+            </TextBlock>
+            <Button Grid.Row="6" Grid.Column="4" Margin="10" Click="AddRow">Add Option</Button>
+            <ScrollViewer Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="5" >
+                <Grid Name="OptionContainer">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Name="TextBoxes" Grid.Row="0" Grid.Column="0"></StackPanel>
+                    <StackPanel Name="RemoveButtons" Grid.Row="0" Grid.Column="1"></StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>
