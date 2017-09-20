@@ -14,3 +14,7 @@ You can have as many bid war options as you like.
 If you aren't a partner, the cheer window will open and just have an error. This won't affect the execution of the program as far as streamlabs donations are concerned.
 
 Each option you input creates a text file that states "string: points" (i.e. "#TeamLeft: 1000"). You can use text file OBS sources to put these in your stream layout, and they update automatically.
+
+Current build is here: https://www.mediafire.com/file/kwtwo86v31z8cn6/release9.zip
+
+Right now messages included with a new subscription are not detected, that will be updated in next release (i wrote this before that was a thing).
