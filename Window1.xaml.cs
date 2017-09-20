@@ -16,9 +16,6 @@ using System.Windows.Shapes;
 
 namespace WpfApp2
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
     public class AuthCodeContainer
     {
         private string access_token;
@@ -56,6 +53,10 @@ namespace WpfApp2
             return this.scope;
         }
     }
+
+
+
+    //window used for user to get their twitch or streamlabs auth token
     public partial class Window1 : Window
     {
         private string type;
@@ -82,6 +83,7 @@ namespace WpfApp2
         {
             using (var client = new HttpClient())
             {
+                //insert auth token into text box when retrieved
                 var values = new Dictionary<string, string> { };
                 string url = "";
                 if (type == "streamlabs")

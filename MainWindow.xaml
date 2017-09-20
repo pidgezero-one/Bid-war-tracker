@@ -18,6 +18,10 @@
                 <Separator />
                 <MenuItem Click="Click_Exit" Header="_Exit" />
             </MenuItem>
+            <MenuItem Header="Corrections">
+                <MenuItem Click="AddManualDonation" Header="Add manual donation..." />
+                <MenuItem Click="UpdateExistingDonation" Header="Update existing donation..." />
+            </MenuItem>
         </Menu>
         <Grid>
             <Grid.ColumnDefinitions>

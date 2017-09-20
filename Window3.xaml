@@ -1,0 +1,42 @@
+﻿<Window x:Class="WpfApp2.Window3"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp2"
+        mc:Ignorable="d"
+        Title="Window3" Height="300" Width="500">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="55" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Margin="10" TextWrapping="Wrap" Grid.Row="0" Grid.Column="0" >
+            Choose unmatched donation:
+            </TextBlock>
+        <ComboBox  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1"
+                HorizontalAlignment="Stretch" 
+            Margin="10"
+            VerticalAlignment="Top"
+                Name="ChosenDonation"/>
+        <TextBlock Margin="10" TextWrapping="Wrap" Grid.Row="1" Grid.Column="0" >
+            Choose bid war option:
+        </TextBlock>
+        <ComboBox  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1"
+                HorizontalAlignment="Stretch" 
+            Margin="10"
+            VerticalAlignment="Top"
+                Name="ManualDonationOption"/>
+        <!--TextBlock Margin="10" TextWrapping="Wrap"  Grid.Row="2" Grid.Column="0" >
+            Enter points:
+            </>
+        <TextBox Margin="10" Name="ManualDonationAmount"  Grid.Row="2" Grid.Column="1" ></TextBox-->
+        <Button Margin="10" Click="SaveDonation"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Update Donation</Button>
+    </Grid>
+</Window>

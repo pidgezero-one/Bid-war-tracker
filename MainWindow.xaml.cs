@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Web.Script.Serialization;
@@ -29,470 +30,29 @@ using WebSocket4Net;
 
 namespace WpfApp2
 {
-
-    public class Contestant
-    {
-        private string text;
-        private double total;
-
-        public Contestant(string text, double total)
-        {
-            this.text = text;
-            this.total = total;
-        }
-
-        public void setText(string val)
-        {
-            this.text = val;
-        }
-        public void setAmount(double val)
-        {
-            this.total = val;
-        }
-        public void addAmount(double val)
-        {
-            this.total += val;
-        }
-        public string getText()
-        {
-            return this.text;
-        }
-        public double getTotal()
-        {
-            return this.total;
-        }
-    }
-
-    public class MoneyConversion
-    {
-        private string date;
-        private MoneyRates rates;
-
-        public MoneyConversion(string date, MoneyRates rates)
-        {
-            this.date = date;
-            this.rates = rates;
-        }
-
-        public MoneyRates getMoneyRates()
-        {
-            return this.rates;
-        }
-        public string getDate()
-        {
-            return this.date;
-        }
-    }
-    public class MoneyRates
-    {
-        public double AUD;
-        public double BRL;
-        public double CAD;
-        public double CHF;
-        public double CZK;
-        public double DKK;
-        public double EUR;
-        public double GBP;
-        public double HKD;
-        public double HUF;
-        public double ILS;
-        public double JPY;
-        public double MXN;
-        public double MYR;
-        public double NOK;
-        public double NZD;
-        public double PHP;
-        public double PLN;
-        public double RUB;
-        public double SEK;
-        public double SGD;
-        public double THB;
-        public double TRY;
-        public double TWD;
-        public double USD;
-
-        public MoneyRates(double AUD = double.NaN, double BRL = double.NaN, double CAD = double.NaN, double CHF = double.NaN, double CZK = double.NaN, double DKK = double.NaN, double EUR = double.NaN, double GBP = double.NaN, double HKD = double.NaN, double HUF = double.NaN, double ILS = double.NaN, double JPY = double.NaN, double MXN = double.NaN, double MYR = double.NaN, double NOK = double.NaN, double NZD = double.NaN, double PHP = double.NaN, double PLN = double.NaN, double RUB = double.NaN, double SEK = double.NaN, double SGD = double.NaN, double THB = double.NaN, double TRY = double.NaN, double TWD = double.NaN, double USD = double.NaN)
-        {
-            this.AUD = AUD;
-            this.BRL = BRL;
-            this.CAD = CAD;
-            this.CHF = CHF;
-            this.CZK = CZK;
-            this.DKK = DKK;
-            this.EUR = EUR;
-            this.GBP = GBP;
-            this.HKD = HKD;
-            this.HUF = HUF;
-            this.ILS = ILS;
-            this.JPY = JPY;
-            this.MXN = MXN;
-            this.MYR = MYR;
-            this.NOK = NOK;
-            this.NZD = NZD;
-            this.PHP = PHP;
-            this.PLN = PLN;
-            this.RUB = RUB;
-            this.SEK = SEK;
-            this.SGD = SGD;
-            this.THB = THB;
-            this.TRY = TRY;
-            this.TWD = TWD;
-            this.USD = USD;
-        }
-        public string getSelectedCurrency()
-        {
-            if (this.AUD != double.NaN && this.AUD != 0) return "AUD";
-            else if (this.BRL != double.NaN && this.BRL != 0) return "BRL";
-            else if (this.CAD != double.NaN && this.CAD != 0) return "CAD";
-            else if (this.CHF != double.NaN && this.CHF != 0) return "CHF";
-            else if (this.CZK != double.NaN && this.CZK != 0) return "CZK";
-            else if (this.DKK != double.NaN && this.DKK != 0) return "DKK";
-            else if (this.EUR != double.NaN && this.EUR != 0) return "EUR";
-            else if (this.GBP != double.NaN && this.GBP != 0) return "GBP";
-            else if (this.HKD != double.NaN && this.HKD != 0) return "HKD";
-            else if (this.HUF != double.NaN && this.HUF != 0) return "HUF";
-            else if (this.ILS != double.NaN && this.ILS != 0) return "ILS";
-            else if (this.JPY != double.NaN && this.JPY != 0) return "JPY";
-            else if (this.MXN != double.NaN && this.MXN != 0) return "MXN";
-            else if (this.MYR != double.NaN && this.MYR != 0) return "MYR";
-            else if (this.NOK != double.NaN && this.NOK != 0) return "NOK";
-            else if (this.NZD != double.NaN && this.NZD != 0) return "NZD";
-            else if (this.PHP != double.NaN && this.PHP != 0) return "PHP";
-            else if (this.PLN != double.NaN && this.PLN != 0) return "PLN";
-            else if (this.RUB != double.NaN && this.RUB != 0) return "RUB";
-            else if (this.SEK != double.NaN && this.SEK != 0) return "SEK";
-            else if (this.SGD != double.NaN && this.SGD != 0) return "SGD";
-            else if (this.THB != double.NaN && this.THB != 0) return "THB";
-            else if (this.TRY != double.NaN && this.TRY != 0) return "TRY";
-            else if (this.TWD != double.NaN && this.TWD != 0) return "TWD";
-            else return null;
-        }
-        public double getRate()
-        {
-            if (this.AUD != double.NaN && this.AUD != 0) return this.AUD;
-            else if (this.BRL != double.NaN && this.BRL != 0) return this.BRL;
-            else if (this.CAD != double.NaN && this.CAD != 0) return this.CAD;
-            else if (this.CHF != double.NaN && this.CHF != 0) return this.CHF;
-            else if (this.CZK != double.NaN && this.CZK != 0) return this.CZK;
-            else if (this.DKK != double.NaN && this.DKK != 0) return this.DKK;
-            else if (this.EUR != double.NaN && this.EUR != 0) return this.EUR;
-            else if (this.GBP != double.NaN && this.GBP != 0) return this.GBP;
-            else if (this.HKD != double.NaN && this.HKD != 0) return this.HKD;
-            else if (this.HUF != double.NaN && this.HUF != 0) return this.HUF;
-            else if (this.ILS != double.NaN && this.ILS != 0) return this.ILS;
-            else if (this.JPY != double.NaN && this.JPY != 0) return this.JPY;
-            else if (this.MXN != double.NaN && this.MXN != 0) return this.MXN;
-            else if (this.MYR != double.NaN && this.MYR != 0) return this.MYR;
-            else if (this.NOK != double.NaN && this.NOK != 0) return this.NOK;
-            else if (this.NZD != double.NaN && this.NZD != 0) return this.NZD;
-            else if (this.PHP != double.NaN && this.PHP != 0) return this.PHP;
-            else if (this.PLN != double.NaN && this.PLN != 0) return this.PLN;
-            else if (this.RUB != double.NaN && this.RUB != 0) return this.RUB;
-            else if (this.SEK != double.NaN && this.SEK != 0) return this.SEK;
-            else if (this.SGD != double.NaN && this.SGD != 0) return this.SGD;
-            else if (this.THB != double.NaN && this.THB != 0) return this.THB;
-            else if (this.TRY != double.NaN && this.TRY != 0) return this.TRY;
-            else if (this.TWD != double.NaN && this.TWD != 0) return this.TWD;
-            else if (this.USD != double.NaN && this.USD != 0) return this.USD;
-            else return double.NaN;
-        }
-        public double getUSD()
-        {
-            return this.USD;
-        }
-    }
-
-    public class Bid {
-        private string donation_id;
-        private int created_at;
-        private double amount;
-        private string currency;
-        private string name;
-        private string email;
-        private string message;
-
-
-        public Bid(string donation_id, int created_at, double amount, string currency, string name, string email, string message)
-        {
-            this.donation_id = donation_id;
-            this.created_at = created_at;
-            this.amount = amount;
-            this.currency = currency;
-            this.name = name;
-            this.email = email;
-            this.message = message;
-        }
-        public string getId()
-        {
-            return this.donation_id;
-        }
-        public int getDate()
-        {
-            return this.created_at;
-        }
-        public double getAmount()
-        {
-            return this.amount;
-        }
-        public string getCurrency()
-        {
-            return this.currency;
-        }
-        public string getDonator()
-        {
-            return this.name;
-        }
-        public string getEmail()
-        {
-            return this.email;
-        }
-        public string getMessage()
-        {
-            return this.message;
-        }
-    }
-
-    public class Donations
-    {
-        private List<Bid> data;
-
-        public Donations(List<Bid> data)
-        {
-            this.data = data;
-        }
-
-        public List<Bid> getDonations()
-        {
-            return this.data;
-        }
-    }
-
-    public class Notifications
-    {
-        private Boolean email;
-        private Boolean push;
-        public Notifications(Boolean email, Boolean push)
-        {
-            this.email = email;
-            this.push = push;
-        }
-    }
-
-    public class TwitchUser
-    {
-        private int _id;
-        private string bio;
-        private string created_at;
-        private string display_name;
-        private string email;
-        private Boolean email_verified;
-        private string logo;
-        private string name;
-        private Notifications notifications;
-        private Boolean partnered;
-        private Boolean twitter_connected;
-        private string type;
-        private string updated_at;
-
-        public TwitchUser(int _id, string bio, string created_at, string email, Boolean email_verified, string logo, string name, Notifications notifications, Boolean partnered, Boolean twitter_connected, string type, string updated_at)
-        {
-            this._id = _id;
-            this.bio = bio;
-            this.created_at = created_at;
-            this.email = email;
-            this.email_verified = email_verified;
-            this.logo = logo;
-            this.name = name;
-            this.notifications = notifications;
-            this.partnered = partnered;
-            this.twitter_connected = twitter_connected;
-            this.type = type;
-            this.updated_at = updated_at;
-        }
-
-        public int getId()
-        {
-            return this._id;
-        }
-
-    }
-
-    public class User
-    {
-        private Twitch twitch;
-
-        public User(Twitch twitch)
-        {
-            this.twitch = twitch;
-        }
-        public Twitch GetTwitch()
-        {
-            return this.twitch;
-        }
-    }
-
-    public class Twitch
-    {
-        private int id;
-        private string display_name;
-        private string name;
-
-        public Twitch(int id, string display_name, string name)
-        {
-            this.id = id;
-            this.display_name = display_name;
-            this.name = name;
-        }
-        public int GetId()
-        {
-            return this.id;
-        }
-    }
-
-    public class SocketMessage
-    {
-        private string type;
-        public SocketMessage(string type)
-        {
-            this.type = type;
-        }
-        public string getType()
-        {
-            return this.type;
-        }
-    }
-
-    public class CheerMessageContainer
-    {
-        private string type;
-        private CheerMessageData data;
-        public CheerMessageContainer(string type, CheerMessageData data)
-        {
-            this.type = type;
-            this.data = data;
-        }
-        public string getType()
-        {
-            return this.type;
-        }
-        public CheerMessageData getData()
-        {
-            return this.data;
-        }
-    }
-
-    public class CheerMessageData
-    {
-        private string topic;
-        private string message;
-        public CheerMessageData(string topic, string message)
-        {
-            this.topic = topic;
-            this.message = message;
-        }
-        public string getTopic()
-        {
-            return this.topic;
-        }
-        public string getMessage()
-        {
-            return this.message;
-        }
-    }
-
-    public class CheerContainer
-    {
-        private Cheer data;
-        private string version;
-        private string message_type;
-        private string message_id;
-        public CheerContainer (Cheer data, string version, string message_type, string message_id)
-        {
-            this.data = data;
-            this.version = version;
-            this.message_type = message_type;
-            this.message_id = message_id;
-        }
-        public Cheer getCheer()
-        {
-            return this.data;
-        }
-        public string getId()
-        {
-            return this.message_id;
-        }
-    }
-
-
-    public class Cheer
-    {
-        private string user_name;
-        private string channel_name;
-        private int user_id;
-        private int channel_id;
-        private string time;
-        private string chat_message;
-        private int bits_used;
-        private int total_bits_used;
-        private string context;
-        private BadgeEntitlement badge_entitlement;
-
-        public Cheer(string user_name, string channel_name, int user_id, int channel_id, string time, string chat_message, int bits_used, int total_bits_used, string context, BadgeEntitlement badge_entitlement, string message_type, string message_id)
-        {
-            this.user_name = user_name;
-            this.channel_name = channel_name;
-            this.user_id = user_id;
-            this.channel_id = channel_id;
-            this.time = time;
-            this.chat_message = chat_message;
-            this.bits_used = bits_used;
-            this.total_bits_used = total_bits_used;
-            this.context = context;
-            this.badge_entitlement = badge_entitlement;
-        }
-        public string getMessage()
-        {
-            return this.chat_message;
-        }
-        public string getUser()
-        {
-            return this.user_name;
-        }
-        public string getTime()
-        {
-            return this.time;
-        }
-
-        public int getAmount()
-        {
-            return this.bits_used;
-        }
-    }
-
-    public class BadgeEntitlement
-    {
-        int new_version;
-        int previous_version;
-
-        public BadgeEntitlement(int new_version, int previous_version)
-        {
-            this.new_version = new_version;
-            this.previous_version = previous_version;
-        }
-    }
-    
-    public partial class Form2 : Window
-    {
-        public Form2()
-        {
-        }
-    }
     
     public partial class MainWindow : Window
     {
         string loaded = "";
         bool changed = false;
+        string my_username;
+        int my_user_id;
+
+
+        //launch status log
         Window2 window2 = new Window2();
+
+        public void logMessage(string text)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {
+                var tblock3 = new TextBlock();
+                tblock3.Text = text;
+                tblock3.TextWrapping = System.Windows.TextWrapping.Wrap;
+                this.window2.Logs.Children.Add(tblock3);
+            });
+        }
+
+        //settings window save/close functions
         private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -768,6 +328,90 @@ namespace WpfApp2
             }
         }
 
+        public void UpdateExistingDonation(object sender, RoutedEventArgs e)
+        {
+            if (my_user_id == 0)
+            {
+                MessageBox.Show("Please connect to Twitch using the 'Launch' button first to add a manual donation.");
+            }
+            else
+            {
+                using (SqliteConnection db = new SqliteConnection("Filename=donations.db"))
+                {
+                    List<string> bidwarOptions = new List<string>();
+                    foreach (object child in TextBoxes.Children)
+                    {
+                        var textbox = (TextBox)child;
+                        if (textbox.Text != "")
+                            bidwarOptions.Add(textbox.Text);
+                    }
+                    db.Open();
+                    string q = "SELECT * FROM allDonations7 WHERE User = @User ORDER BY Created_At DESC";
+                    SqliteCommand insertSQL2 = new SqliteCommand(q, db);
+                    insertSQL2.Parameters.AddWithValue("@User", my_user_id);
+                    SqliteDataReader query2;
+                    try
+                    {
+                        query2 = insertSQL2.ExecuteReader();
+                    }
+                    catch (SqliteException error)
+                    {
+                        throw new Exception(error.Message);
+                        System.Diagnostics.Debug.WriteLine(error.Message);
+                    }
+                    List<Bid> donationHistory = new List<Bid>();
+                    while (query2.Read())
+                    {
+                        string message = query2.GetString(7);
+                        Boolean found = false; //only attribute this donation to the first found search term in the donation message
+                        foreach (var msg in bidwarOptions)
+                        {
+                            if (message.ToLower().Trim().Contains(msg.ToLower().Trim()) && !found)
+                            {
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            try
+                            {
+                                Bid thisBid = new Bid(query2.GetString(0), query2.GetInt32(2), query2.GetDouble(3), query2.GetString(4), query2.GetString(5), query2.GetString(6), query2.GetString(7));
+                                donationHistory.Add(thisBid);
+
+                            }
+                            catch (Exception eee)
+                            {
+                                Bid thisBid = new Bid(query2.GetString(0), query2.GetInt32(2), query2.GetDouble(3), query2.GetString(4), query2.GetString(5), null, query2.GetString(7));
+                                donationHistory.Add(thisBid);
+                            }
+                        }
+                    }
+                    db.Close();
+                    Window3 window3 = new Window3(bidwarOptions, donationHistory, my_user_id);
+                    window3.Show();
+                }
+            }
+        }
+
+        public void AddManualDonation(object sender, RoutedEventArgs e)
+        {
+            if (my_user_id == 0)
+            {
+                MessageBox.Show("Please connect to Twitch using the 'Launch' button first to add a manual donation.");
+            }
+            else
+            {
+                List<string> bidwarOptions = new List<string>();
+                foreach (object child in TextBoxes.Children)
+                {
+                    var textbox = (TextBox)child;
+                    if (textbox.Text != "")
+                        bidwarOptions.Add(textbox.Text);
+                }
+                Window4 window4 = new Window4(bidwarOptions, my_user_id);
+                window4.Show();
+            }
+        }
 
 
 
@@ -782,10 +426,12 @@ namespace WpfApp2
             using (SqliteConnection db = new SqliteConnection("Filename=donations.db"))
             {
                 db.Open();
+                //initialize DB if not exists
                 String tableCommand = "CREATE TABLE IF NOT EXISTS allDonations7 (Id STRING PRIMARY KEY, User INTEGER NOT NULL, Created_At INTEGER NOT NULL, Amount DOUBLE NOT NULL, Currency NVARCHAR(2048) NOT NULL, Donator NVARCHAR(2048), Donator_Email NVARCHAR(2048), Message NVARCHAR(2048))";
                 String tableCommand2 = "CREATE TABLE IF NOT EXISTS lastFile2 (Id INTEGER PRIMARY KEY AUTOINCREMENT, Filename NVARCHAR(2048))";
                 SqliteCommand createTable = new SqliteCommand(tableCommand, db);
                 SqliteCommand createTable2 = new SqliteCommand(tableCommand2, db);
+                //retrieve last opened file and open it by default
                 SqliteCommand selectSQL = new SqliteCommand("SELECT Filename FROM lastFile2 ORDER BY Id DESC LIMIT 1", db);
                 SqliteDataReader query = null;
                 try
@@ -797,6 +443,7 @@ namespace WpfApp2
                 catch (SqliteException e)
                 {
                     throw new Exception(e.Message);
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                 }
                 string fname = null;
                 if (query != null)
@@ -825,6 +472,8 @@ namespace WpfApp2
             }
         }
 
+
+        //what to do to configure options dialog if no file loaded or file closed
         public void initializeBlankConfig()
         {
             resetConfig();
@@ -839,6 +488,7 @@ namespace WpfApp2
             AccessToken.Password = null;
         }
 
+        //functions for options dialog controls
         public void addTextbox(string def = null)
         {
             TextBox txt = new TextBox();
@@ -864,7 +514,6 @@ namespace WpfApp2
             RemoveButtons.Children.Add(rm);
 
         }
-
         public void AddRow(object sender, RoutedEventArgs e)
         {
             addTextbox();
@@ -893,21 +542,27 @@ namespace WpfApp2
                 this.Title += "*";
             }
         }
+
+
+        //launch window to direct user to get their token
         public void GetToken(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://streamlabs.com/api/v1.0/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=http://pidgezero.one/appredirect.html&response_type=code&scope=donations.read");
+            System.Diagnostics.Process.Start("http://streamlabs.com/api/v1.0/authorize?client_id=oT3hU90De8ZVbyWmVd1xQpghuwB4UXG843wuI5Nb&redirect_uri=http://pidgezero.one/appredirect.html&response_type=code&scope=donations.read");
 
             Window1 w = new Window1("streamlabs");
             w.Show();
         }
         public void GetTwitchToken(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://api.twitch.tv/kraken/oauth2/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=http://pidgezero.one/appredirect.html&scope=channel_read&response_type=code");
+            System.Diagnostics.Process.Start("https://api.twitch.tv/kraken/oauth2/authorize?client_id=9tztppkgkayamw5135n4uo216fwvoy&redirect_uri=http://pidgezero.one/appredirect.html&scope=channel_read chat_login&response_type=code");
 
             Window1 w = new Window1("twitch");
             w.Show();
         }
 
+
+        //saving cheer -- will only work when application is live since there is no REST API for cheer history
+        //this doesnt seem to be firing at all? no log message
         public void saveCheer(CheerContainer cheer, int uid)
         {
             try
@@ -916,22 +571,21 @@ namespace WpfApp2
                 {
                     db.Open();
                     var cheerObject = cheer.getCheer();
+                    
 
-                    DateTime oDate = Convert.ToDateTime(cheerObject.getTime());
-                    long epochTicks = new DateTime(1970, 1, 1).Ticks;
-                    long unixTime = ((oDate.Ticks - epochTicks) / TimeSpan.TicksPerSecond);
+                    Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
                     SqliteCommand insertSQL = new SqliteCommand("INSERT INTO allDonations7 (Id, User, Created_At, Amount, Currency, Donator, Donator_Email, Message) SELECT @Id1, @User1, @Created_At1, @Amount1, @Currency1, @Donator1, null, @Message1 WHERE NOT EXISTS(SELECT 1 FROM allDonations7 WHERE Id = @Id AND User = @User AND Created_At = @Created_At AND Amount = @Amount AND Currency = @Currency AND Donator = @Donator AND Donator_Email = null AND Message = @Message)", db);
                     insertSQL.Parameters.AddWithValue("@Id1", cheer.getId());
                     insertSQL.Parameters.AddWithValue("@User1", uid);
-                    insertSQL.Parameters.AddWithValue("@Created_At1", unixTime);
+                    insertSQL.Parameters.AddWithValue("@Created_At1", unixTimestamp);
                     insertSQL.Parameters.AddWithValue("@Amount1", cheerObject.getAmount());
                     insertSQL.Parameters.AddWithValue("@Currency1", "BIT");
                     insertSQL.Parameters.AddWithValue("@Donator1", cheerObject.getUser());
                     insertSQL.Parameters.AddWithValue("@Message1", cheerObject.getMessage());
                     insertSQL.Parameters.AddWithValue("@Id", cheer.getId());
                     insertSQL.Parameters.AddWithValue("@User", uid);
-                    insertSQL.Parameters.AddWithValue("@Created_At", unixTime);
+                    insertSQL.Parameters.AddWithValue("@Created_At", unixTimestamp);
                     insertSQL.Parameters.AddWithValue("@Amount", cheerObject.getAmount());
                     insertSQL.Parameters.AddWithValue("@Currency", "BIT");
                     insertSQL.Parameters.AddWithValue("@Donator", cheerObject.getUser());
@@ -943,14 +597,19 @@ namespace WpfApp2
                         tblock.Text = "Cheer: " + cheerObject.getAmount() + " from " + cheerObject.getUser() + " (" + cheerObject.getMessage() + ")";
                         tblock.TextWrapping = System.Windows.TextWrapping.Wrap;
                         window2.Logs.Children.Add(tblock);
+                        List<string> lines = new List<string>();
+                        lines.Add(unixTimestamp + " [BITS] " + cheerObject.getAmount() + " from " + cheerObject.getUser() + " (" + cheerObject.getMessage() + ")");
+                        File.AppendAllLines("output/logs.txt", lines);
                     }
                     catch (SqliteException ex)
                     {
                         var tblock = new TextBlock();
-                        tblock.Text = "Error saving donation " + cheerObject.getAmount() + " from " + cheerObject.getUser() + " (" + cheerObject.getMessage() + "): " + ex.Message;
+                        tblock.Text = "Error saving cheer " + cheerObject.getAmount() + " from " + cheerObject.getUser() + " (" + cheerObject.getMessage() + "): " + ex.Message;
                         tblock.TextWrapping = System.Windows.TextWrapping.Wrap;
                         window2.Logs.Children.Add(tblock);
-                        throw new Exception(ex.Message);
+                        List<string> lines = new List<string>();
+                        lines.Add(unixTimestamp + " [BITS] " + "Error saving cheer " + cheerObject.getAmount() + " from " + cheerObject.getUser() + " (" + cheerObject.getMessage() + "): " + ex.Message);
+                        File.AppendAllLines("output/logs.txt", lines);
                     }
                     db.Close();
                 }
@@ -960,6 +619,8 @@ namespace WpfApp2
             }
         }
 
+        //retrieve all new streamlabs donations, fires every 10 seconds
+        //accepts parameters to specify a timeframe to reduce workload, based on the ID of the most recently saved donation
         public void fetchDonations(int uid, int earliest = -1, string latest = "")
         {
             using (SqliteConnection db = new SqliteConnection("Filename=donations.db"))
@@ -1010,8 +671,6 @@ namespace WpfApp2
                             window.Content = bid.getAmount() * definition.getMoneyRates().getUSD() / definition.getMoneyRates().getRate();
                             window.Show();
                         }*/
-                        //then convert to points, 1 US cent = 1 point or 1 bit = 1 point
-                        //make SQL queries to insert if not previously existing
                         SqliteCommand insertSQL = new SqliteCommand("INSERT INTO allDonations7 (Id, User, Created_At, Amount, Currency, Donator, Donator_Email, Message) SELECT @Id1, @User1, @Created_At1, @Amount1, @Currency1, @Donator1, @Donator_Email1, @Message1 WHERE NOT EXISTS(SELECT 1 FROM allDonations7 WHERE Id = @Id AND User = @User AND Created_At = @Created_At AND Amount = @Amount AND Currency = @Currency AND Donator = @Donator AND Donator_Email = @Donator_Email AND Message = @Message)", db);
                         insertSQL.Parameters.AddWithValue("@Id1", bid.getId());
                         insertSQL.Parameters.AddWithValue("@User1", uid);
@@ -1029,23 +688,30 @@ namespace WpfApp2
                         insertSQL.Parameters.AddWithValue("@Donator", bid.getDonator());
                         insertSQL.Parameters.AddWithValue("@Donator_Email", bid.getEmail());
                         insertSQL.Parameters.AddWithValue("@Message", bid.getMessage());
+                        Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
                         try
                         {
-                            insertSQL.ExecuteNonQuery();
-                            string matched = null;
-                            foreach (object child in TextBoxes.Children)
+                            int inserted = insertSQL.ExecuteNonQuery();
+                            if (inserted == 1)
                             {
-                                var textbox = (TextBox)child;
-                                if (bid.getMessage().ToLower().Trim().Contains(textbox.Text.ToLower().Trim()))
+                                string matched = null;
+                                foreach (object child in TextBoxes.Children)
                                 {
-                                    matched = textbox.Text;
+                                    var textbox = (TextBox)child;
+                                    if (bid.getMessage().ToLower().Trim().Contains(textbox.Text.ToLower().Trim()))
+                                    {
+                                        matched = textbox.Text;
+                                    }
                                 }
+                                var tblock = new TextBlock();
+                                tblock.Text = "Donation: $" + bid.getAmount() + " from " + bid.getDonator() + " (" + bid.getMessage() + ") -- " + (matched == null ? "did not match any fields" : "matched " + matched);
+                                tblock.TextWrapping = System.Windows.TextWrapping.Wrap;
+                                window2.Logs.Children.Add(tblock);
+                                List<string> lines = new List<string>();
+                                lines.Add(unixTimestamp + " [SLBS] New donation: " + bid.getAmount() + " from " + bid.getDonator() + " at " + bid.getDate() + " (" + bid.getMessage() + ") -- " + (matched == null ? "did not match any fields" : "matched " + matched));
+                                File.AppendAllLines("output/logs.txt", lines);
+                                File.WriteAllText("output/latest.txt", "Latest Esports Sponsorship: " + bid.getDonator() + " ($" + Math.Round(bid.getAmount(), 2) + ")");
                             }
-                            
-                            var tblock = new TextBlock();
-                            tblock.Text = "Donation: $" + bid.getAmount() + " from " + bid.getDonator() + " (" + bid.getMessage() + ") -- " + (matched == null ? "did not match any fields" : "matched " + matched);
-                            tblock.TextWrapping = System.Windows.TextWrapping.Wrap;
-                            window2.Logs.Children.Add(tblock);
                         }
                         catch (SqliteException ex)
                         {
@@ -1053,6 +719,9 @@ namespace WpfApp2
                             tblock.Text = "Error saving donation $" + bid.getAmount() + " from " + bid.getDonator() + " (" + bid.getMessage() + "): " + ex.Message;
                             tblock.TextWrapping = System.Windows.TextWrapping.Wrap;
                             window2.Logs.Children.Add(tblock);
+                            List<string> lines = new List<string>();
+                            lines.Add(unixTimestamp + " [SLBS] Error saving donation $" + bid.getAmount() + " from " + bid.getDonator() + " (" + bid.getMessage() + "): " + ex.Message);
+                            File.AppendAllLines("output/logs.txt", lines);
                         }
                     }
                     if (allDonations7.Count == 100)
@@ -1071,6 +740,8 @@ namespace WpfApp2
             }
         }
 
+
+        //loop thru DB to refresh point counters
         public void UpdateDonations(int uid)
         {
             using (SqliteConnection db = new SqliteConnection("Filename=donations.db"))
@@ -1078,9 +749,10 @@ namespace WpfApp2
                 db.Open();
                 List<String> entries = new List<string>();
                 //use SQL to get most recent donation
-                SqliteCommand insertSQL = new SqliteCommand("SELECT Id FROM allDonations7 WHERE User = @User AND Currency != @Bits ORDER BY Created_At DESC LIMIT 1", db);
+                SqliteCommand insertSQL = new SqliteCommand("SELECT Id FROM allDonations7 WHERE User = @User AND Currency NOT LIKE @Bits AND Currency NOT LIKE @Sub ORDER BY Created_At DESC LIMIT 1", db);
                 insertSQL.Parameters.AddWithValue("@User", uid);
-                insertSQL.Parameters.AddWithValue("@Bits", "BIT");
+                insertSQL.Parameters.AddWithValue("@Bits", "%BIT%");
+                insertSQL.Parameters.AddWithValue("@Sub", "%SUB%");
                 SqliteDataReader query;
                 try
                 {
@@ -1089,6 +761,7 @@ namespace WpfApp2
                 catch (SqliteException error)
                 {
                     throw new Exception(error.Message);
+                    System.Diagnostics.Debug.WriteLine(error.Message);
                 }
                 int earliest = -1;
                 string str = "";
@@ -1103,47 +776,48 @@ namespace WpfApp2
                 {
                     earliest = query.GetInt32(0);
                 }
+                //then check for new donations and save them
+                fetchDonations(uid, earliest, "");
+                //then fetch all donations in DB in chosen timeframe, loop through them to update points counters
                 string q = "SELECT * FROM allDonations7 WHERE User = @User AND Created_At >= @since";
+                //string q = "SELECT * FROM allDonations7 WHERE Created_At >= @since";
                 if (DonationCutoff2.SelectedDate != null)
                 {
                     var dto = DonationCutoff2.SelectedDate.Value.Date - new DateTime(1970, 1, 1, 0, 0, 0);
                     until = dto.TotalSeconds;
                     q += " AND Created_At <= @until";
                 }
-                fetchDonations(uid, earliest, ""); //replace 0 with whatever you get from DB
+                Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                List<string> lines1 = new List<string>();
+                lines1.Add(unixTimestamp + " [META] Refreshing totals from time " + ((Int64)since + 21600) + (until != 0 ? " to " + ((Int64)until + 21600) : ""));
+                File.AppendAllLines("output/logs.txt", lines1);
                 SqliteCommand insertSQL2 = new SqliteCommand(q, db);
                 insertSQL2.Parameters.AddWithValue("@User", uid);
-                insertSQL2.Parameters.AddWithValue("@since", (Int64)since + 21600);
+                insertSQL2.Parameters.AddWithValue("@since", ((Int64)since + 21600));
                 if (until != 0)
                 {
-                    insertSQL2.Parameters.AddWithValue("@until", (Int64)until + 21600);
-                }
-                SqliteDataReader query2;
-                try
-                {
-                    query2 = insertSQL2.ExecuteReader();
-                }
-                catch (SqliteException error)
-                {
-                    throw new Exception(error.Message);
+                    insertSQL2.Parameters.AddWithValue("@until", ((Int64)until + 21600));
                 }
                 List<Bid> donations = new List<Bid>();
-                var lines = 0;
-                while (query2.Read())
+                using (SqliteDataReader query2 = insertSQL2.ExecuteReader())
                 {
-                    lines++;
-                    try { 
-                        Bid thisBid = new Bid(query2.GetString(0), query2.GetInt32(2), query2.GetDouble(3), query2.GetString(4), query2.GetString(5), query2.GetString(6), query2.GetString(7));
-                        donations.Add(thisBid);
-                    }
-                    catch(Exception e)
+                    var lines = 0;
+                    while (query2.Read())
                     {
-                        Bid thisBid = new Bid(query2.GetString(0), query2.GetInt32(2), query2.GetDouble(3), query2.GetString(4), query2.GetString(5), null, query2.GetString(7));
-                        donations.Add(thisBid);
+                        lines++;
+                        try
+                        {
+                            Bid thisBid = new Bid(query2.GetString(0), query2.GetInt32(2), query2.GetDouble(3), query2.GetString(4), query2.GetString(5), query2.GetString(6), query2.GetString(7));
+                            donations.Add(thisBid);
+                        }
+                        catch (Exception e)
+                        {
+                            Bid thisBid = new Bid(query2.GetString(0), query2.GetInt32(2), query2.GetDouble(3), query2.GetString(4), query2.GetString(5), null, query2.GetString(7));
+                            donations.Add(thisBid);
+                        }
                     }
+                    db.Close();
                 }
-                db.Close();
-                //then get all donations from DB
                 List<Contestant> contestants = new List<Contestant>();
                 foreach (object child in TextBoxes.Children)
                 {
@@ -1153,12 +827,17 @@ namespace WpfApp2
                 }
                 foreach (var bid in donations)
                 {
+                    Boolean found = false; //only attribute this donation to the first found search term in the donation message
                     foreach (var contestant in contestants)
                     {
-                        if (bid.getMessage().ToLower().Trim().Contains(contestant.getText().ToLower().Trim()))
+                        if (bid.getMessage().ToLower().Trim().Contains(contestant.getText().ToLower().Trim()) && !found)
                         {
                             //convert to points
                             if (bid.getCurrency() == "BIT")
+                            {
+                                contestant.addAmount(Math.Floor(bid.getAmount()));
+                            }
+                            else if (bid.getCurrency() == "SUB")
                             {
                                 contestant.addAmount(Math.Floor(bid.getAmount()));
                             }
@@ -1166,20 +845,24 @@ namespace WpfApp2
                             {
                                 contestant.addAmount(Math.Floor(100 * bid.getAmount()));
                             }
+                            found = true;
                         }
                     }
                 }
                 foreach (var contestant in contestants)
                 {
+                    List<string> lines2 = new List<string>();
+                    lines2.Add(unixTimestamp + " [META] " + contestant.getText() + ": " + contestant.getTotal());
+                    File.AppendAllLines("output/logs.txt", lines2);
                     str = contestant.getText() + ": " + contestant.getTotal();
                     File.WriteAllText("output/" + contestant.getText() + ".txt", str);
                 }
             }
         }
 
+        //start listening for donations, open status window
         public void LaunchWindow(object sender, RoutedEventArgs e)
         {
-            DateTime oDate = Convert.ToDateTime("2017-02-09T13:23:58.168Z");
             if (!Directory.Exists("output"))
             {
                 DirectoryInfo di = Directory.CreateDirectory("output");
@@ -1193,7 +876,7 @@ namespace WpfApp2
             HttpWebRequest request2;
             request2 = (HttpWebRequest)WebRequest.Create(url2);
             request2.Method = "GET";
-            request2.Headers["Client-ID"] = "YOUR_CLIENT_ID";
+            request2.Headers["Client-ID"] = "9tztppkgkayamw5135n4uo216fwvoy";
             request2.Headers["Authorization"] = "OAuth " + TwitchAccessToken.Password;
             try
             {
@@ -1204,6 +887,8 @@ namespace WpfApp2
                 dataStream.Close();
                 string json = responseFromServer;
                 User user = JsonConvert.DeserializeObject<User>(json);
+                my_username = user.GetTwitch().getName();
+                my_user_id = user.GetTwitch().GetId();
                 WebResponse resp2 = request2.GetResponse();
                 Stream dataStream2 = resp2.GetResponseStream();
                 StreamReader reader2 = new StreamReader(dataStream2);
@@ -1211,6 +896,8 @@ namespace WpfApp2
                 dataStream2.Close();
                 string json2 = responseFromServer2;
                 TwitchUser twitchuser = JsonConvert.DeserializeObject<TwitchUser>(json2);
+
+                //set up timer for streamlabs donation checker
                 void updateWindow(object source, ElapsedEventArgs ev)
                 {
                     this.Dispatcher.Invoke(() =>
@@ -1219,14 +906,46 @@ namespace WpfApp2
                     });
 
                 }
-                //Make logger
-                //append textblocks to scrollable stackpanel
                 UpdateDonations(user.GetTwitch().GetId());
-                Timer myTimer = new System.Timers.Timer();
+                System.Timers.Timer myTimer = new System.Timers.Timer();
                 myTimer.Elapsed += new ElapsedEventHandler(updateWindow);
                 myTimer.Interval = 10000;
                 myTimer.Enabled = true;
-                WebSocket websocket = new WebSocket("wss://pubsub-edge.twitch.tv");
+                List<string> bidwarOptions = new List<string>();
+                foreach (object child in TextBoxes.Children)
+                {
+                    var textbox = (TextBox)child;
+                    if (textbox.Text != "")
+                        bidwarOptions.Add(textbox.Text);
+                }
+
+                //set up IRC listener for subs, resubs, and corrections
+                void doIRC()
+                {
+                    
+                    IRCConfig conf = new IRCConfig();
+                    conf.name = my_username;
+                    conf.nick = my_username;
+                    conf.port = 6667;
+                    conf.channel = "#" + my_username;
+                    conf.server = "irc.chat.twitch.tv";
+                    conf.password = "oauth:" + TwitchAccessToken.Password;
+                    conf.joined = false;
+
+
+                    IRCBot bot = new IRCBot(conf);
+                    using (bot)
+                    {
+                        System.Diagnostics.Debug.WriteLine("connecting");
+                        bot.Connect();
+                        bot.IRCWork(user.GetTwitch().GetId(), bidwarOptions);
+                    }
+                }
+                Thread irc = new Thread(new ThreadStart(doIRC));
+                irc.Start();
+
+                //websocket listener for bits
+                /*WebSocket websocket = new WebSocket("wss://pubsub-edge.twitch.tv");
                 websocket.Opened += new EventHandler(websocket_Opened);
                 websocket.Error += new EventHandler<SuperSocket.ClientEngine.ErrorEventArgs>(websocket_Error);
                 websocket.Closed += new EventHandler(websocket_Closed);
@@ -1235,10 +954,9 @@ namespace WpfApp2
                 openListener();
                 JavaScriptSerializer serializer = new JavaScriptSerializer();
                 var listen = false;
-                Timer pingTimer = new System.Timers.Timer();
+                System.Timers.Timer pingTimer = new System.Timers.Timer();
                 pingTimer.Elapsed += new ElapsedEventHandler(sendPing);
                 pingTimer.Interval = 240000;
-                //pingTimer.Interval = 10000;
                 pingTimer.Enabled = true;
                 void websocket_Opened(object sender2, EventArgs e2)
                 {
@@ -1321,10 +1039,11 @@ namespace WpfApp2
                     ts[0] = "channel-bits-events-v1." + twitchuser.getId().ToString();
                     var listener = new { type = "LISTEN", data = new { topics = ts, auth_token = TwitchAccessToken.Password } };
                     websocket.Send(serializer.Serialize(listener));
-                }
+                }*/
             }
             catch (Exception ee)
             {
+                System.Diagnostics.Debug.WriteLine(ee.Message);
                 MessageBox.Show("Could not connect to StreamLabs. Try re-entering your access token. The server may also be down.");
             }
         }

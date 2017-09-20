@@ -14,9 +14,7 @@ using System.Windows.Shapes;
 
 namespace WpfApp2
 {
-    /// <summary>
-    /// Interaction logic for Window2.xaml
-    /// </summary>
+    //this is the status log window for the app
     public partial class Window2 : Window
     {
         public Window2()
