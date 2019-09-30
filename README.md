@@ -1,4 +1,7 @@
 # Bid-war-tracker
+
+# Note: this application no longer works due to a deprecated twitch API. I do plan to update it in the future, but am focused on other projects at the moment.
+
 Looks for a string in a streamlabs donation or cheer event and accumulates all donations that match.
 
 Created for https://twitch.tv/Chrescendo
